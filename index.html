@@ -78,6 +78,359 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-微服务项目基础配置" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2025/06/27/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E9%A1%B9%E7%9B%AE%E5%9F%BA%E7%A1%80%E9%85%8D%E7%BD%AE/" class="article-date">
+  <time class="dt-published" datetime="2025-06-27T14:18:25.000Z" itemprop="datePublished">2025-06-27</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2025/06/27/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E9%A1%B9%E7%9B%AE%E5%9F%BA%E7%A1%80%E9%85%8D%E7%BD%AE/">微服务项目基础配置</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <pre><code>引导类
+    package com.heima.user;
+    import org.mybatis.spring.annotation.MapperScan;
+    import org.springframework.boot.SpringApplication;
+    import org.springframework.boot.autoconfigure.SpringBootApplication;
+    import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+    @SpringBootApplication 
+    @EnableDiscoveryClient //开启nacos基础配置
+    @MapperScan(&quot;com.heima.user.mapper&quot;)
+    public class UserApplication &#123;
+
+        public static void main(String[] args) &#123;
+            SpringApplication.run(UserApplication.class,args);
+        &#125;
+    &#125;
+
+bootstrap.yml //nacos配置文件
+    server:
+      port: 51801
+    spring:
+      application:
+        name: leadnews-user
+      cloud:
+        nacos:
+//nacos服务发现地址,用于服务注册与发现
+          discovery:
+            server-addr: 192.168.200.130:8848
+//nacos配置地址,
+          config:
+            server-addr: 192.168.200.130:8848
+            file-extension: yml
+</code></pre>
+<p>logback.xml &#x2F;&#x2F;日志配置文件</p>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+
+&lt;configuration&gt;
+    &lt;!--定义日志文件的存储地址,使用绝对路径--&gt;
+    &lt;property name=&quot;LOG_HOME&quot; value=&quot;D:/logs&quot;/&gt;
+    &lt;!-- Console 输出设置 --&gt;
+    &lt;appender name=&quot;CONSOLE&quot; class=&quot;ch.qos.logback.core.ConsoleAppender&quot;&gt;
+        &lt;encoder&gt;
+            &lt;!--格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符--&gt;
+            &lt;pattern&gt;%d&#123;yyyy-MM-dd HH:mm:ss.SSS&#125; [%thread] %-5level %logger&#123;36&#125; - %msg%n&lt;/pattern&gt;
+            &lt;charset&gt;utf8&lt;/charset&gt;
+        &lt;/encoder&gt;
+    &lt;/appender&gt;
+
+    &lt;!-- 按照每天生成日志文件 --&gt;
+    &lt;appender name=&quot;FILE&quot; class=&quot;ch.qos.logback.core.rolling.RollingFileAppender&quot;&gt;
+        &lt;rollingPolicy class=&quot;ch.qos.logback.core.rolling.TimeBasedRollingPolicy&quot;&gt;
+            &lt;!--日志文件输出的文件名--&gt;
+            &lt;fileNamePattern&gt;$&#123;LOG_HOME&#125;/leadnews.%d&#123;yyyy-MM-dd&#125;.log&lt;/fileNamePattern&gt;
+        &lt;/rollingPolicy&gt;
+        &lt;encoder&gt;
+            &lt;pattern&gt;%d&#123;yyyy-MM-dd HH:mm:ss.SSS&#125; [%thread] %-5level %logger&#123;36&#125; - %msg%n&lt;/pattern&gt;
+        &lt;/encoder&gt;
+    &lt;/appender&gt;
+
+    &lt;!-- 异步输出 --&gt;
+    &lt;appender name=&quot;ASYNC&quot; class=&quot;ch.qos.logback.classic.AsyncAppender&quot;&gt;
+        &lt;!-- 不丢失日志.默认的,如果队列的80%已满,则会丢弃TRACT、DEBUG、INFO级别的日志 --&gt;
+        &lt;discardingThreshold&gt;0&lt;/discardingThreshold&gt;
+        &lt;!-- 更改默认的队列的深度,该值会影响性能.默认值为256 --&gt;
+        &lt;queueSize&gt;512&lt;/queueSize&gt;
+        &lt;!-- 添加附加的appender,最多只能添加一个 --&gt;
+        &lt;appender-ref ref=&quot;FILE&quot;/&gt;
+    &lt;/appender&gt;
+
+
+    &lt;logger name=&quot;org.apache.ibatis.cache.decorators.LoggingCache&quot; level=&quot;DEBUG&quot; additivity=&quot;false&quot;&gt;
+        &lt;appender-ref ref=&quot;CONSOLE&quot;/&gt;
+    &lt;/logger&gt;
+&lt;!--配置i日志级别 --&gt;
+    &lt;logger name=&quot;org.springframework.boot&quot; level=&quot;debug&quot;/&gt;
+    &lt;root level=&quot;info&quot;&gt;
+        &lt;!--&lt;appender-ref ref=&quot;ASYNC&quot;/&gt;--&gt;
+        &lt;appender-ref ref=&quot;FILE&quot;/&gt;
+        &lt;appender-ref ref=&quot;CONSOLE&quot;/&gt;
+    &lt;/root&gt;
+&lt;/configuration&gt;
+</code></pre>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2025/06/27/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E9%A1%B9%E7%9B%AE%E5%9F%BA%E7%A1%80%E9%85%8D%E7%BD%AE/" data-id="cmcewebho0005iwcy2uv0bsd0" data-title="微服务项目基础配置" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-windows家庭版无hyper-v" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2025/06/27/windows%E5%AE%B6%E5%BA%AD%E7%89%88%E6%97%A0hyper-v/" class="article-date">
+  <time class="dt-published" datetime="2025-06-27T14:18:04.000Z" itemprop="datePublished">2025-06-27</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2025/06/27/windows%E5%AE%B6%E5%BA%AD%E7%89%88%E6%97%A0hyper-v/">windows家庭版无hyper-v</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h5 id="一般我们新买的电脑默认自带的是Windows家庭版。这个版本是没有Hyper-V的。如果安装自带Hyper-V的版本，则需要另外购买。但是我们还是有办法在Windows11的家庭版上安装和启用Hyper-V的。"><a href="#一般我们新买的电脑默认自带的是Windows家庭版。这个版本是没有Hyper-V的。如果安装自带Hyper-V的版本，则需要另外购买。但是我们还是有办法在Windows11的家庭版上安装和启用Hyper-V的。" class="headerlink" title="一般我们新买的电脑默认自带的是Windows家庭版。这个版本是没有Hyper-V的。如果安装自带Hyper-V的版本，则需要另外购买。但是我们还是有办法在Windows11的家庭版上安装和启用Hyper-V的。"></a>一般我们新买的电脑默认自带的是Windows家庭版。这个版本是没有Hyper-V的。如果安装自带Hyper-V的版本，则需要另外购买。但是我们还是有办法在Windows11的家庭版上安装和启用Hyper-V的。</h5><h3 id="安装启用Hyper-V"><a href="#安装启用Hyper-V" class="headerlink" title="安装启用Hyper-V"></a>安装启用Hyper-V</h3><h4 id="下载并安装"><a href="#下载并安装" class="headerlink" title="下载并安装"></a>下载并安装</h4><p>复制下面内容到名字是“Hyper-V Installer.cmd”的文件中。</p>
+<p>代码语言：javascript</p>
+<p>代码运行次数：0</p>
+<p>运行</p>
+<pre><code>pushd &quot;%~dp0&quot;
+dir /b %SystemRoot%\servicing\Packages\*Hyper-V*.mum &gt;hyper-v.txt
+for /f %%i in (&#39;findstr /i . hyper-v.txt 2^&gt;nul&#39;) do dism /online /norestart /add-package:&quot;%SystemRoot%\servicing\Packages\%%i&quot;
+del hyper-v.txt
+Dism /online /enable-feature /featurename:Microsoft-Hyper-V-All /LimitAccess /ALL
+</code></pre>
+<p>然后<strong>使用“以管理员身份运行”该脚本</strong>。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2025/06/27/windows%E5%AE%B6%E5%BA%AD%E7%89%88%E6%97%A0hyper-v/" data-id="cmcewebhn0004iwcy2tmw944z" data-title="windows家庭版无hyper-v" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-mysql配置" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2025/06/27/mysql%E9%85%8D%E7%BD%AE/" class="article-date">
+  <time class="dt-published" datetime="2025-06-27T14:17:22.000Z" itemprop="datePublished">2025-06-27</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2025/06/27/mysql%E9%85%8D%E7%BD%AE/">mysql配置</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <pre><code>spring:
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/leadnews_user?useUnicode=true&amp;characterEncoding=UTF-8&amp;serverTimezone=UTC
+    username: root
+    password: root
+# 设置Mapper接口所对应的XML文件位置，如果你在Mapper接口中有自定义方法，需要进行该配置
+mybatis-plus:
+  mapper-locations: classpath*:mapper/*.xml
+  # 设置别名包扫描路径，通过该属性可以给包中的类注册别名
+  type-aliases-package: com.heima.model.user.pojos
+</code></pre>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2025/06/27/mysql%E9%85%8D%E7%BD%AE/" data-id="cmcewebhm0003iwcycefbfumi" data-title="mysql配置" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-maven依赖导入问题" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2025/06/27/maven%E4%BE%9D%E8%B5%96%E5%AF%BC%E5%85%A5%E9%97%AE%E9%A2%98/" class="article-date">
+  <time class="dt-published" datetime="2025-06-27T14:16:49.000Z" itemprop="datePublished">2025-06-27</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2025/06/27/maven%E4%BE%9D%E8%B5%96%E5%AF%BC%E5%85%A5%E9%97%AE%E9%A2%98/">maven依赖导入问题</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h3 id="一-导入maven项目-并且maven的settings-xml配置正常-但就是无法导入依赖"><a href="#一-导入maven项目-并且maven的settings-xml配置正常-但就是无法导入依赖" class="headerlink" title="一,导入maven项目,并且maven的settings.xml配置正常,但就是无法导入依赖"></a>一,导入maven项目,并且maven的settings.xml配置正常,但就是无法导入依赖</h3><p>暂时解决方法:新建一个maven项目,在新建的maven项目中导入所需的依赖,重新回到原项目刷新maven即可</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2025/06/27/maven%E4%BE%9D%E8%B5%96%E5%AF%BC%E5%85%A5%E9%97%AE%E9%A2%98/" data-id="cmcewebhk0001iwcyaj0t74j0" data-title="maven依赖导入问题" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-github与git的ssh连接" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2025/06/27/github%E4%B8%8Egit%E7%9A%84ssh%E8%BF%9E%E6%8E%A5/" class="article-date">
+  <time class="dt-published" datetime="2025-06-27T14:16:09.000Z" itemprop="datePublished">2025-06-27</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2025/06/27/github%E4%B8%8Egit%E7%9A%84ssh%E8%BF%9E%E6%8E%A5/">github与git的ssh连接</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <p>生成SSH Keys</p>
+<p>进入任意文件夹，右键空白处然后点Git bash here,输入 ssh-keygen -t rsa -C “邮件地址”</p>
+<p>Copy</p>
+<p>然后敲4次Enter⌨️</p>
+<p>然后进入C:\Users\用户名，在里面进入.ssh文件</p>
+<p>用记事本打开里面的id_rsa.pub,全选复制里面的代码</p>
+<p><strong>然后打开github</strong></p>
+<p>进入用户设置，找到SSH keys</p>
+<p>新建SSH keys，名称随意，在下面粘贴代码，</p>
+<p>然后创建</p>
+<p><strong>测试是否成功</strong></p>
+<p>在git bash中输入 ssh -T <a href="mailto:&#x67;&#x69;&#116;&#64;&#x67;&#105;&#x74;&#x68;&#117;&#98;&#x2e;&#x63;&#111;&#109;">git@github.com</a></p>
+<p>Copy</p>
+<p>回车，然后再输入yes</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2025/06/27/github%E4%B8%8Egit%E7%9A%84ssh%E8%BF%9E%E6%8E%A5/" data-id="cmcewebhm0002iwcyc3pyesgh" data-title="github与git的ssh连接" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-docker命令别名" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2025/06/27/docker%E5%91%BD%E4%BB%A4%E5%88%AB%E5%90%8D/" class="article-date">
+  <time class="dt-published" datetime="2025-06-27T14:15:30.000Z" itemprop="datePublished">2025-06-27</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2025/06/27/docker%E5%91%BD%E4%BB%A4%E5%88%AB%E5%90%8D/">docker命令别名</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h3 id="进入-bashrc-中修改配置（-bashrc-是-root-下的隐藏文件）"><a href="#进入-bashrc-中修改配置（-bashrc-是-root-下的隐藏文件）" class="headerlink" title="进入 .bashrc 中修改配置（ .bashrc 是 root 下的隐藏文件）"></a>进入 .bashrc 中修改配置（ .bashrc 是 root 下的隐藏文件）</h3><p>cd &#x2F;root</p>
+<p>vim .bashrc</p>
+<h3 id="在-bashrc-中加入以下内容"><a href="#在-bashrc-中加入以下内容" class="headerlink" title="在 .bashrc 中加入以下内容"></a>在 .bashrc 中加入以下内容</h3>
+alias dps='docker ps --format "table {{.ID}}\t {{.Image}}\t{{.Ports}}\t{{.Status}}\t{{.Names}}"'alias dis='docker images'
+
+<h3 id="重新加载文件"><a href="#重新加载文件" class="headerlink" title="重新加载文件"></a>重新加载文件</h3><p>source &#x2F;root&#x2F;.bashrc</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2025/06/27/docker%E5%91%BD%E4%BB%A4%E5%88%AB%E5%90%8D/" data-id="cmcewebhg0000iwcyfn990gh6" data-title="docker命令别名" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
     <article id="post-docker拉取与部署" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
     <a href="/2025/06/27/docker%E6%8B%89%E5%8F%96%E4%B8%8E%E9%83%A8%E7%BD%B2/" class="article-date">
@@ -211,11 +564,23 @@
       <ul>
         
           <li>
-            <a href="/2025/06/27/docker%E6%8B%89%E5%8F%96%E4%B8%8E%E9%83%A8%E7%BD%B2/">docker拉取与部署</a>
+            <a href="/2025/06/27/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E9%A1%B9%E7%9B%AE%E5%9F%BA%E7%A1%80%E9%85%8D%E7%BD%AE/">微服务项目基础配置</a>
           </li>
         
           <li>
-            <a href="/2025/06/27/hello-world/">Hello World</a>
+            <a href="/2025/06/27/windows%E5%AE%B6%E5%BA%AD%E7%89%88%E6%97%A0hyper-v/">windows家庭版无hyper-v</a>
+          </li>
+        
+          <li>
+            <a href="/2025/06/27/mysql%E9%85%8D%E7%BD%AE/">mysql配置</a>
+          </li>
+        
+          <li>
+            <a href="/2025/06/27/maven%E4%BE%9D%E8%B5%96%E5%AF%BC%E5%85%A5%E9%97%AE%E9%A2%98/">maven依赖导入问题</a>
+          </li>
+        
+          <li>
+            <a href="/2025/06/27/github%E4%B8%8Egit%E7%9A%84ssh%E8%BF%9E%E6%8E%A5/">github与git的ssh连接</a>
           </li>
         
       </ul>

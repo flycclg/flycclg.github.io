@@ -4,17 +4,17 @@
   <meta charset="utf-8">
   
   
-  <title>docker拉取与部署 | fly的笔记</title>
+  <title>maven依赖导入问题 | fly的笔记</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="nacos安装 ①：docker拉取镜像 docker pull nacos&#x2F;nacos-server:1.2.0 ②：创建容器 docker run –env MODE&#x3D;standalone –name nacos –restart&#x3D;always -d -p 8848:8848 nacos&#x2F;nacos-server:1.2.0  MODE&#x3D;sta">
+  <meta name="description" content="一,导入maven项目,并且maven的settings.xml配置正常,但就是无法导入依赖暂时解决方法:新建一个maven项目,在新建的maven项目中导入所需的依赖,重新回到原项目刷新maven即可">
 <meta property="og:type" content="article">
-<meta property="og:title" content="docker拉取与部署">
-<meta property="og:url" content="http://example.com/2025/06/27/docker%E6%8B%89%E5%8F%96%E4%B8%8E%E9%83%A8%E7%BD%B2/index.html">
+<meta property="og:title" content="maven依赖导入问题">
+<meta property="og:url" content="http://example.com/2025/06/27/maven%E4%BE%9D%E8%B5%96%E5%AF%BC%E5%85%A5%E9%97%AE%E9%A2%98/index.html">
 <meta property="og:site_name" content="fly的笔记">
-<meta property="og:description" content="nacos安装 ①：docker拉取镜像 docker pull nacos&#x2F;nacos-server:1.2.0 ②：创建容器 docker run –env MODE&#x3D;standalone –name nacos –restart&#x3D;always -d -p 8848:8848 nacos&#x2F;nacos-server:1.2.0  MODE&#x3D;sta">
+<meta property="og:description" content="一,导入maven项目,并且maven的settings.xml配置正常,但就是无法导入依赖暂时解决方法:新建一个maven项目,在新建的maven项目中导入所需的依赖,重新回到原项目刷新maven即可">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2025-06-27T14:05:33.000Z">
-<meta property="article:modified_time" content="2025-06-27T14:05:53.178Z">
+<meta property="article:published_time" content="2025-06-27T14:16:49.000Z">
+<meta property="article:modified_time" content="2025-06-27T14:17:00.785Z">
 <meta property="article:author" content="fly">
 <meta property="article:tag" content="配置">
 <meta name="twitter:card" content="summary">
@@ -78,10 +78,10 @@
 </header>
 
       <div class="outer">
-        <section id="main"><article id="post-docker拉取与部署" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+        <section id="main"><article id="post-maven依赖导入问题" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
-    <a href="/2025/06/27/docker%E6%8B%89%E5%8F%96%E4%B8%8E%E9%83%A8%E7%BD%B2/" class="article-date">
-  <time class="dt-published" datetime="2025-06-27T14:05:33.000Z" itemprop="datePublished">2025-06-27</time>
+    <a href="/2025/06/27/maven%E4%BE%9D%E8%B5%96%E5%AF%BC%E5%85%A5%E9%97%AE%E9%A2%98/" class="article-date">
+  <time class="dt-published" datetime="2025-06-27T14:16:49.000Z" itemprop="datePublished">2025-06-27</time>
 </a>
     
   </div>
@@ -92,7 +92,7 @@
         
   
     <h1 class="p-name article-title" itemprop="headline name">
-      docker拉取与部署
+      maven依赖导入问题
     </h1>
   
 
@@ -100,24 +100,12 @@
     
     <div class="e-content article-entry" itemprop="articleBody">
       
-        <p>nacos安装</p>
-<p>①：docker拉取镜像 docker pull nacos&#x2F;nacos-server:1.2.0</p>
-<p>②：创建容器 docker run –env MODE&#x3D;standalone –name nacos –restart&#x3D;always -d -p 8848:8848 nacos&#x2F;nacos-server:1.2.0</p>
-<ul>
-<li><p>MODE&#x3D;standalone 单机版</p>
-</li>
-<li><p>–restart&#x3D;always 开机启动</p>
-</li>
-<li><p>-p 8848:8848 映射端口</p>
-</li>
-<li><p>-d 创建一个守护式容器在后台运行</p>
-</li>
-</ul>
+        <h3 id="一-导入maven项目-并且maven的settings-xml配置正常-但就是无法导入依赖"><a href="#一-导入maven项目-并且maven的settings-xml配置正常-但就是无法导入依赖" class="headerlink" title="一,导入maven项目,并且maven的settings.xml配置正常,但就是无法导入依赖"></a>一,导入maven项目,并且maven的settings.xml配置正常,但就是无法导入依赖</h3><p>暂时解决方法:新建一个maven项目,在新建的maven项目中导入所需的依赖,重新回到原项目刷新maven即可</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2025/06/27/docker%E6%8B%89%E5%8F%96%E4%B8%8E%E9%83%A8%E7%BD%B2/" data-id="cmcew7b5f000014cyfnpc4mxl" data-title="docker拉取与部署" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://example.com/2025/06/27/maven%E4%BE%9D%E8%B5%96%E5%AF%BC%E5%85%A5%E9%97%AE%E9%A2%98/" data-id="cmcewebhk0001iwcyaj0t74j0" data-title="maven依赖导入问题" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -127,19 +115,19 @@
     
 <nav id="article-nav">
   
-    <a href="/2025/06/27/docker%E5%91%BD%E4%BB%A4%E5%88%AB%E5%90%8D/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2025/06/27/mysql%E9%85%8D%E7%BD%AE/" id="article-nav-newer" class="article-nav-link-wrap">
       <strong class="article-nav-caption">前一篇</strong>
       <div class="article-nav-title">
         
-          docker命令别名
+          mysql配置
         
       </div>
     </a>
   
   
-    <a href="/2025/06/27/hello-world/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2025/06/27/github%E4%B8%8Egit%E7%9A%84ssh%E8%BF%9E%E6%8E%A5/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">后一篇</strong>
-      <div class="article-nav-title">Hello World</div>
+      <div class="article-nav-title">github与git的ssh连接</div>
     </a>
   
 </nav>
